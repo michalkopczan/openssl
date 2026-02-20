@@ -224,7 +224,8 @@ func (c *Certificate) SetSerial(serial *big.Int) error {
 	defer C.BN_free(bn)
 
 	serialBytes := serial.Bytes()
-	if bn = C.BN_bin2bn((*C.uchar)(unsafe.Pointer(&serialBytes[0])), C.int(len(serialBytes)), bn); bn == nil {
+	bn = C.BN_bin2bn((*C.uchar)(unsafe.Pointer(&serialBytes[0])), C.int(len(serialBytes)), bn)
+	if bn == nil {
 		return errors.New("failed to set serial")
 	}
 	if sno = C.BN_to_ASN1_INTEGER(bn, sno); sno == nil {
